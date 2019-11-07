@@ -5,5 +5,6 @@
 extern crate uysh;
 
 fn main() {
-    println!("{}", uysh::variable::START_DATE)
+    println!("uysh {}", uysh::START_DATE);
+    println!("uymas {}", uymas::START_DATE);
 }

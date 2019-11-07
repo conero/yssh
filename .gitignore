@@ -17,6 +17,7 @@
 #already existing elements are commented out
 
 /target
+**/target
 **/*.rs.bk
 Cargo.lock
 .idea
