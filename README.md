@@ -18,6 +18,13 @@
 
 ### rust
 
+```shell
+# 打开本地文档
+rustup doc
+```
+
+
+
 #### rust fmt
 
 [代码仓库](https://github.com/rust-lang/rustfmt)，初始化如下：
