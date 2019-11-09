@@ -12,7 +12,6 @@ use std::ops::Index;
 // 原始数据
 //      解析规则: --key=value, "key=value", "key=value&key2=value"
 pub struct Cmd{
-//    args: Vec<str>
     pub command: String,                // 命令
     _args: Vec<String>,                 // 内部参数，默认由系统参数读取
     _setting: Vec<String>,              // 选项集合
@@ -36,10 +35,12 @@ fn _cf_none(_cmd: &str){
 fn split_str_kv(ss: String, s: char) -> (i8, [String; 2 ]){
     let mut kv: [String; 2] = [String::new(), String::new()];
     let mut idx: i8 = -1;
+    let mut ss_to_char = ss.chars();
     for i in 0..ss.len(){
-        let cv = ss.get(i);
-        if cv == format!("{}", s){
-            kv[0] = String::from(ss[..i]);
+//        let cv = ss.get(i);
+        let cv = ss_to_char.nth(i);
+        if cv == Some(s){
+            kv[0] = String::from(&ss[..i]);
             kv[1] = String::from(&ss[i+1..]);
             idx = i as i8;
             break
