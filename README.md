@@ -12,7 +12,7 @@
 
 ## 概述
 
-*基于 rust 与 golang 的代码编写常用的命令行工具*
+*基于 rust 与 golang 的代码编写常用的命令行工具。rust 语言的启发项目：[deno](https://github.com/denoland/deno), [rocket](https://github.com/SergioBenitez/Rocket).*
 
 
 
@@ -36,4 +36,21 @@ rustup component add rustfmt
 # 格式化
 cargo fmt
 ```
+
+
+
+## 设计
+
+### 命令程序
+
+```powershell
+# 运行
+uysh
+```
+
+
+
+### uymas
+
+*与使用 ，Rocket 类似的宏实现路由，考虑的复杂性先使用简单的回调函数实现。*
 
