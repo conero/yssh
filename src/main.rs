@@ -8,6 +8,7 @@ fn main() {
     println!("uysh {}", uysh::START_DATE);
     println!("uymas {}", uymas::START_DATE);
     // 数据测试
-    let cmd = uymas::cmd::Cmd::new();
-    cmd.run()
+    let mut cmd = uymas::cmd::Cmd::new();
+    cmd.run();
+    println!("{}", cmd.command);
 }
