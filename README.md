@@ -45,8 +45,25 @@ cargo fmt
 
 ```powershell
 # 运行
+# 格式 
+#	uysh [command] [option]
+#	uysh [option]
 uysh
 ```
+
+
+
+#### 选项、数据
+
+```shell
+# 选项
+(-xyz, --xyz, --test, --any) => [x, y, z, xyz, test, any]
+
+# 数据
+--key=value, "key=value", "key=value&key2=value"
+```
+
+
 
 
 

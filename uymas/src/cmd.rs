@@ -1,5 +1,6 @@
 use std::env;
 use std::collections::HashMap;
+use std::ops::Index;
 
 //测试文件
 //@todo 失败，且 intellJ rust plugin 无效
@@ -18,7 +19,7 @@ pub struct Cmd{
     _data_raw: HashMap<String, String>, // 原始输入值
     _cf_empty: fn(),                     // 空的函数调用
     _cf_none: fn(_cmd: &str),            // 空的函数调用
-    _cf_cmds: HashMap<String, fn()>// 初始化方法
+    _cf_cmds: HashMap<String, fn()>      // 初始化方法
 }
 
 // 默认空调用方法
@@ -30,6 +31,23 @@ fn _cf_empty(){
 fn _cf_none(_cmd: &str){
     println!("{} 命令不存在！", _cmd)
 }
+
+//字符串分割为kv型
+fn split_str_kv(ss: String, s: char) -> (i8, [String; 2 ]){
+    let mut kv: [String; 2] = [String::new(), String::new()];
+    let mut idx: i8 = -1;
+    for i in 0..ss.len(){
+        let cv = ss.get(i);
+        if cv == format!("{}", s){
+            kv[0] = String::from(ss[..i]);
+            kv[1] = String::from(&ss[i+1..]);
+            idx = i as i8;
+            break
+        }
+    }
+    return (idx, kv);
+}
+
 
 // 命令行
 impl Cmd{
@@ -55,7 +73,7 @@ impl Cmd{
             }
             self._args = args;
         }
-        return self;
+        return self
     }
 
     // 参数解析
@@ -72,6 +90,27 @@ impl Cmd{
                 if &arg[..1] != "-"{
                     self.command = arg.to_owned();
                     continue;
+                }
+            }
+            // 选项解析
+            // (--|-)
+            if &arg[..1] == "-"{
+                // --
+                if &arg[..2] == "--"{
+                    let value = &arg[2..];
+                    let idx = value.index("=");
+                    if idx > -1{
+                        let key = value[..idx];
+                        let vStr = value[idx+1..];
+                        self._data_raw.insert(String::from(key), String::from(vStr));
+                    }else {
+                        self._setting.push(value.to_string());
+                    }
+                }else {
+                    let value = &arg[1..];
+                    for v in value.split(""){
+                        self._setting.push(v.to_string());
+                    }
                 }
             }
         }
