@@ -1,6 +1,5 @@
 use std::env;
 use std::collections::HashMap;
-use std::ops::Index;
 
 //测试文件
 //@todo 失败，且 intellJ rust plugin 无效
@@ -32,21 +31,43 @@ fn _cf_none(_cmd: &str){
 }
 
 //字符串分割为kv型
-fn split_str_kv(ss: String, s: char) -> (i8, [String; 2 ]){
+pub fn split_str_kv(ss: String, s: char) -> (i8, [String; 2 ]){
     let mut kv: [String; 2] = [String::new(), String::new()];
     let mut idx: i8 = -1;
-    let mut ss_to_char = ss.chars();
-    for i in 0..ss.len(){
-//        let cv = ss.get(i);
-        let cv = ss_to_char.nth(i);
-        if cv == Some(s){
-            kv[0] = String::from(&ss[..i]);
-            kv[1] = String::from(&ss[i+1..]);
-            idx = i as i8;
-            break
+    let ss_to_char = ss.chars();
+    let mut i: i8 = 0;
+    for c in ss_to_char{
+        if c == s{
+            idx = i;
+            let tmp_i = i  as usize;
+            kv[0] = String::from(&ss[..tmp_i]);
+            kv[1] = str_trim_quote(String::from(&ss[tmp_i+1..]));
+            break;
         }
+        i = i+1;
     }
     return (idx, kv);
+}
+
+//@todo 未实现逻辑
+// 清理字符串中的多的双引号
+// 'string' => string
+// "string" => string
+pub fn str_trim_quote(raw_str: String) -> String {
+    let mut raw_new_str = format!("{}", raw_str);
+    let rs_len = &raw_str.len();
+    let mut raw_char = raw_new_str.chars();
+    let first_char = raw_char.nth(0);
+    let end_char = raw_char.nth(rs_len-1);
+    if first_char == end_char{
+        if first_char == Some('"') && first_char == Some('\''){
+            let tmp_str = &raw_str[1..rs_len - 1];
+            raw_new_str = String::from(tmp_str);
+        }
+    }
+
+//    return format!("{}", &raw_new_str);
+    return raw_new_str.to_string()
 }
 
 
@@ -99,11 +120,12 @@ impl Cmd{
                 // --
                 if &arg[..2] == "--"{
                     let value = &arg[2..];
-                    let idx = value.index("=");
+                    let (idx, dd) = split_str_kv(String::from(value), '=');
+                    //let idx = value.index("=");
                     if idx > -1{
-                        let key = value[..idx];
-                        let vStr = value[idx+1..];
-                        self._data_raw.insert(String::from(key), String::from(vStr));
+                        let key = &dd[0];
+                        let v_str = &dd[1];
+                        self._data_raw.insert(String::from(key), String::from(v_str));
                     }else {
                         self._setting.push(value.to_string());
                     }
