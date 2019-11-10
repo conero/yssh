@@ -55,12 +55,15 @@ pub fn split_str_kv(ss: String, s: char) -> (i8, [String; 2 ]){
 // "string" => string
 pub fn str_trim_quote(raw_str: String) -> String {
     let mut raw_new_str = format!("{}", raw_str);
-    let rs_len = &raw_str.len();
+//    let rs_len = &raw_str.len();
     let mut raw_char = raw_new_str.chars();
-    let first_char = raw_char.nth(0);
-    let end_char = raw_char.nth(rs_len-1);
+    let rs_len = raw_char.count();
+    let first_char = &raw_char.nth(0);
+    let end_char = &raw_char.nth(rs_len-1);
+    println!("{:?}", first_char);
+    println!("{:?}", end_char);
     if first_char == end_char{
-        if first_char == Some('"') && first_char == Some('\''){
+        if first_char == &Some('"') && first_char == &Some('\''){
             let tmp_str = &raw_str[1..rs_len - 1];
             raw_new_str = String::from(tmp_str);
         }

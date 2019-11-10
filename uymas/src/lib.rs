@@ -35,7 +35,10 @@ mod tests {
     #[test]
     fn test_cmd_str_trim_quote(){
         let s = cmd::str_trim_quote(String::from("'test in the centos!'"));
-        println!("{}", s)
+        println!("{}", s);
+
+        let s = cmd::str_trim_quote(String::from("\"test in the centos!\""));
+        println!("{}", s);
     }
 }
 
