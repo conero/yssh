@@ -49,28 +49,23 @@ pub fn split_str_kv(ss: String, s: char) -> (i8, [String; 2 ]){
     return (idx, kv);
 }
 
-//@todo 未实现逻辑
 // 清理字符串中的多的双引号
 // 'string' => string
 // "string" => string
-pub fn str_trim_quote(raw_str: String) -> String {
-    let mut raw_new_str = format!("{}", raw_str);
-//    let rs_len = &raw_str.len();
-    let mut raw_char = raw_new_str.chars();
-    let rs_len = raw_char.count();
-    let first_char = &raw_char.nth(0);
-    let end_char = &raw_char.nth(rs_len-1);
-    println!("{:?}", first_char);
-    println!("{:?}", end_char);
-    if first_char == end_char{
-        if first_char == &Some('"') && first_char == &Some('\''){
-            let tmp_str = &raw_str[1..rs_len - 1];
-            raw_new_str = String::from(tmp_str);
-        }
-    }
+pub fn str_trim_quote(mut raw_str: String) -> String {
+    //let chars = raw_str.chars();
+    let len = raw_str.len();
+    let first = &raw_str[..1];
+    let end = &raw_str[len-1..];
 
-//    return format!("{}", &raw_new_str);
-    return raw_new_str.to_string()
+    if first == end{
+        if first == "'" || first == "\""{
+            let new_str = &raw_str[1..len-1];
+            raw_str = new_str.parse().unwrap()
+        }
+
+    }
+    raw_str
 }
 
 
@@ -181,7 +176,7 @@ impl Cmd{
         }else{
             if self._cf_cmds.contains_key(&self.command){
                 let cl2 = self._cf_cmds.get(&self.command);
-                cl2.unwrap();
+                cl2.unwrap()();
             }else {
                 let cl_none = self._cf_none;
                 cl_none(&self.command);
@@ -194,6 +189,15 @@ impl Cmd{
         self._init_args();
         self._parse_args();
         self.router()
+    }
+
+    // 获取解析以后的参数
+    pub fn get_args(self) -> Vec<String>{
+        self._args
+    }
+    // 获取解析后的数据
+    pub fn get_raw_data(self) -> HashMap<String, String>{
+        self._data_raw
     }
 }
 
