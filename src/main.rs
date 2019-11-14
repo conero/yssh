@@ -45,10 +45,10 @@ fn cmd_help(_app: &Cmd) {
 
 //目录扫描
 fn cmd_scan(app: &Cmd) {
-    //    let dir = app.raw_def(String::from("dir"), String::from("./"));
+    let dir = app.raw_def(String::from("dir"), String::from("./"));
 
     println!("{}", app);
-    let dir = "./";
+    //let dir = "./";
     let paths = fs::read_dir(dir).unwrap();
 
     for path in paths {

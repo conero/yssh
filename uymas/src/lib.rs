@@ -16,13 +16,13 @@ mod tests {
         assert_eq!(2 + 2, 4);
     }
     #[test]
-    fn args(){
+    fn args() {
         use std::env;
         println!("{:?}", env::args())
     }
 
     #[test]
-    fn test_cmd_split_str_kv(){
+    fn test_cmd_split_str_kv() {
         // case1
         let (idx, kv) = cmd::split_str_kv(String::from("key=value"), '=');
         println!("{} => {:?}", idx, kv);
@@ -33,7 +33,7 @@ mod tests {
     }
 
     #[test]
-    fn test_cmd_str_trim_quote(){
+    fn test_cmd_str_trim_quote() {
         let s = cmd::str_trim_quote(String::from("'test in the centos!'"));
         println!("{}", s);
 
@@ -41,5 +41,3 @@ mod tests {
         println!("{}", s);
     }
 }
-
-

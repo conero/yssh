@@ -35,6 +35,8 @@ rustup doc
 rustup component add rustfmt
 # 格式化
 cargo fmt
+# 格式化并显示详情
+cargo fmt --all -v
 ```
 
 
