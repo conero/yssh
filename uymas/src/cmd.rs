@@ -108,7 +108,7 @@ impl Cmd {
     }
 
     // 参数解析
-    pub fn _parse_args(&mut self) {
+    fn _parse_args(&mut self) {
         for i in 0..self._args.len() {
             if i == 0 {
                 continue;
@@ -207,12 +207,14 @@ impl Cmd {
     pub fn get_args(self) -> Vec<String> {
         self._args
     }
+
     // 获取解析后的数据
     pub fn get_raw_data(self) -> HashMap<String, String> {
         self._data_raw
     }
+
     // 带默认值运行
-    pub fn raw_def(self, key: String, def: String) -> String {
+    pub fn raw_def(&self, key: String, def: String) -> String {
         if self._data_raw.contains_key(key.as_str()) {
             return self._data_raw.get(key.as_str()).unwrap().to_string();
         }

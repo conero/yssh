@@ -4,7 +4,6 @@
 //创建项目根
 extern crate uysh;
 
-use std::fs;
 use uymas::cmd::Cmd;
 
 fn main() {
@@ -13,7 +12,7 @@ fn main() {
 
     // 项目测试
     // cmd.set_args(vec!["--test='name'"]);
-    cmd.set_args(vec!["scan"]);
+    //cmd.set_args(vec!["scan"]);
     cmd.cmd_fn_call(&"version", cmd_version);
     cmd.cmd_fn_call(&"help", cmd_help);
     cmd.cmd_fn_call(&"scan", cmd_scan);
@@ -41,17 +40,11 @@ fn cmd_version(_app: &Cmd) {
 fn cmd_help(_app: &Cmd) {
     println!(" 命令列表如下");
     println!(" . version 版本信息打印");
+    println!(" . scan 目录扫描工具");
 }
 
 //目录扫描
 fn cmd_scan(app: &Cmd) {
     let dir = app.raw_def(String::from("dir"), String::from("./"));
-
-    println!("{}", app);
-    //let dir = "./";
-    let paths = fs::read_dir(dir).unwrap();
-
-    for path in paths {
-        println!("{}", path.unwrap().path().display())
-    }
+    uysh::scan::dirs(dir);
 }
