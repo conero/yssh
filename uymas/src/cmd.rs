@@ -1,4 +1,6 @@
 use std::env;
+use std::fmt;
+use std::fmt::{Formatter, Error};
 use std::collections::HashMap;
 
 //测试文件
@@ -12,21 +14,27 @@ use std::collections::HashMap;
 //      解析规则: --key=value, "key=value", "key=value&key2=value"
 pub struct Cmd{
     pub command: String,                // 命令
-    _args: Vec<String>,                 // 内部参数，默认由系统参数读取
+    _args: Vec<String>,                 // 内R部参数，默认由系统参数读取
     _setting: Vec<String>,              // 选项集合
     _data_raw: HashMap<String, String>, // 原始输入值
-    _cf_empty: fn(),                     // 空的函数调用
-    _cf_none: fn(_cmd: &str),            // 空的函数调用
-    _cf_cmds: HashMap<String, fn()>      // 初始化方法
+    _cf_empty: fn(app: &Cmd),                     // 空的函数调用
+    _cf_none: fn(app: &Cmd, _cmd: &str),            // 空的函数调用
+    _cf_cmds: HashMap<String, fn(app: &Cmd)>      // 初始化方法
+}
+
+// 接口应用
+pub struct App{
+    pub name: String,           // 描述
+    pub command: String         // 命令
 }
 
 // 默认空调用方法
-fn _cf_empty(){
+fn _cf_empty(_app: &Cmd){
     println!(" 欢迎使用 uymas 命令行解析工具")
 }
 
 // 方法不存在的调用
-fn _cf_none(_cmd: &str){
+fn _cf_none(_app: &Cmd, _cmd: &str){
     println!("{} 命令不存在！", _cmd)
 }
 
@@ -152,34 +160,35 @@ impl Cmd{
     }
 
     // 空命令函数调用
-    pub fn empty_fn_call(&mut self, _call: fn()) -> &mut Cmd{
+    pub fn empty_fn_call(&mut self, _call: fn(app: &Cmd)) -> &mut Cmd{
         self._cf_empty = _call;
         return self
     }
     // 为发现的访问
-    pub fn none_fn_call(&mut self, _call: fn(_cmd: &str)) -> &mut Cmd{
+    pub fn none_fn_call(&mut self, _call: fn(app: &Cmd, _cmd: &str)) -> &mut Cmd{
         self._cf_none = _call;
         return self
     }
 
     // 函数式方法调用
-    pub fn cmd_fn_call(&mut self, _cmd: &str, _call: fn()) -> &mut Cmd{
+    pub fn cmd_fn_call(&mut self, _cmd: &str, _call: fn(app: &Cmd)) -> &mut Cmd{
         self._cf_cmds.insert(String::from(_cmd), _call);
         return self
     }
+
 
     // 方法路由
     pub fn router(&mut self){
         if self.command.is_empty(){
             let call = self._cf_empty;
-            call();
+            call(self);
         }else{
             if self._cf_cmds.contains_key(&self.command){
                 let cl2 = self._cf_cmds.get(&self.command);
-                cl2.unwrap()();
+                cl2.unwrap()(self);
             }else {
                 let cl_none = self._cf_none;
-                cl_none(&self.command);
+                cl_none(self, &self.command);
             }
         }
     }
@@ -199,6 +208,60 @@ impl Cmd{
     pub fn get_raw_data(self) -> HashMap<String, String>{
         self._data_raw
     }
+    // 带默认值运行
+    pub fn raw_def(self, key: String, def:String) -> String{
+        if self._data_raw.contains_key(key.as_str()){
+            return self._data_raw.get(key.as_str()).unwrap().to_string();
+        }
+        return def
+    }
+}
+
+// 打印、调试必须继承 fmt::Debug trait
+// 调试输出
+impl fmt::Debug for Cmd{
+    fn fmt(&self, f: &mut Formatter<'_>) -> Result<(), Error> {
+        write!(f, "Cmd {{ _args: {:?}, _setting: {:?}, _data_raw: {:?}}}",
+               self._args, self._setting, self._data_raw)
+    }
+}
+
+impl fmt::Display for Cmd{
+    fn fmt(&self, f: &mut Formatter<'_>) -> Result<(), Error> {
+        write!(f, "Cmd {{ _args: {:?}, _setting: {:?}, _data_raw: {:?}}}",
+               self._args, self._setting, self._data_raw)
+    }
+}
+
+//copy|Clone
+impl Copy for Cmd{}
+impl Clone for Cmd{
+    fn clone(&self) -> Self {
+        Self{
+            command: String::from(),
+            _args: self._args,
+            _setting: self._setting,
+            _data_raw: self.get_raw_data(),
+            _cf_empty: self._cf_empty,
+            _cf_none: self._cf_none,
+            _cf_cmds: self._cf_cmds
+        }
+    }
 }
 
 
+//默认方法
+impl App{
+    // 构造函数
+    pub fn new(name:String, command:String) -> App{
+        App{
+            name,
+            command
+        }
+    }
+
+    // 默认命令
+    pub fn index(self) {
+        unimplemented!()
+    }
+}
