@@ -21,4 +21,4 @@
 **/*.rs.bk
 Cargo.lock
 .idea
-uysh.iml
+*.iml
