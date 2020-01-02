@@ -41,10 +41,22 @@ fn cmd_help(_app: &Cmd) {
     println!(" 命令列表如下");
     println!(" . version 版本信息打印");
     println!(" . scan 目录扫描工具");
+    println!("   --dir=<target_dir> 目标目录，默认为 ./");
 }
 
 //目录扫描
 fn cmd_scan(app: &Cmd) {
     let dir = app.raw_def(String::from("dir"), String::from("./"));
-    yssh::scan::dirs(dir);
+    //yssh::scan::dirs(dir);
+
+    let mut di = yssh::scan::DirInfo::new(dir);
+    di.scan_base();
+
+    println!(" 正在读取目录: {}", di.path_dir);
+    println!(
+        " 统计数: {}, 文件为: {}, 目录: {}.",
+        di.count, di.count_file, di.count_dir
+    );
+    println!(" 总大小: {}.", di.bytes);
+    println!(" 用时时长: {}.", di.run_second);
 }
