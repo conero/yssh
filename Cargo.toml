@@ -1,5 +1,5 @@
 [package]
-name = "uysh"
+name = "yssh"
 version = "0.1.0"
 authors = ["Conero <conero@163.com>"]
 edition = "2018"

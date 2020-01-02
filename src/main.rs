@@ -2,7 +2,7 @@
 //uysh 项目主入口
 
 //创建项目根
-extern crate uysh;
+extern crate yssh;
 
 use uymas::cmd::Cmd;
 
