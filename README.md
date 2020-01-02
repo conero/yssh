@@ -48,9 +48,9 @@ cargo fmt --all -v
 ```powershell
 # 运行
 # 格式 
-#	uysh [command] [option]
-#	uysh [option]
-uysh
+#	yysh [command] [option]
+#	yysh [option]
+yysh
 ```
 
 

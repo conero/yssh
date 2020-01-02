@@ -1,5 +1,5 @@
 //2019年11月1日 星期五
-//uysh 项目主入口
+//yssh 项目主入口
 
 //创建项目根
 extern crate yssh;
@@ -24,8 +24,8 @@ fn main() {
 fn cmd_empty(_app: &Cmd) {
     println!(
         " 欢迎使用 {}, power by {}.",
-        uysh::PROJECT_CODE,
-        uysh::AUTHOR
+        yssh::PROJECT_CODE,
+        yssh::AUTHOR
     );
     println!(" 命令行: [command] [option]");
     println!(" 输入 help 键入更多帮助信息");
@@ -33,7 +33,7 @@ fn cmd_empty(_app: &Cmd) {
 
 //版本信息
 fn cmd_version(_app: &Cmd) {
-    println!("{}/{}", uysh::VERSION, uysh::RELEASE);
+    println!("{}/{}", yssh::VERSION, yssh::RELEASE);
 }
 
 // 帮助信息
@@ -46,5 +46,5 @@ fn cmd_help(_app: &Cmd) {
 //目录扫描
 fn cmd_scan(app: &Cmd) {
     let dir = app.raw_def(String::from("dir"), String::from("./"));
-    uysh::scan::dirs(dir);
+    yssh::scan::dirs(dir);
 }
