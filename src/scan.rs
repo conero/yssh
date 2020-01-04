@@ -49,7 +49,6 @@ impl DirInfo {
 
         for path in paths {
             self.count = self.count + 1;
-            //println!("{}", path.unwrap().path().display());
             let pb = path.unwrap().path();
             let mut path_name = String::from(pb.to_str().unwrap());
             path_name = path_name.replace("\\", "/");

@@ -12,9 +12,9 @@ fn main() {
 
     // 项目测试
     // cmd.set_args(vec!["--test='name'"]);
-    //cmd.set_args(vec!["scan"]);
+    //cmd.set_args(vec!["scan", "--dir", "C:/conero/application"]);
     cmd.cmd_fn_call(&"version", cmd_version);
-    cmd.cmd_fn_call(&"help", cmd_help);
+    cmd.cmd_fn_calls(vec!["help", "?"], cmd_help);
     cmd.cmd_fn_call(&"scan", cmd_scan);
     cmd.empty_fn_call(cmd_empty);
     cmd.run();
@@ -58,5 +58,5 @@ fn cmd_scan(app: &Cmd) {
         di.count, di.count_file, di.count_dir
     );
     println!(" 总大小: {}.", di.bytes);
-    println!(" 用时时长: {}.", di.run_second);
+    println!(" 用时时长: {}s.", di.run_second);
 }

@@ -1,6 +1,6 @@
 [package]
 name = "uymas"
-version = "0.1.0"
+version = "0.2.0"
 authors = ["Conero <conero@163.com>"]
 edition = "2018"
 

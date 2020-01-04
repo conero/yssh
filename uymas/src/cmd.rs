@@ -109,6 +109,7 @@ impl Cmd {
 
     // 参数解析
     fn _parse_args(&mut self) {
+        let mut last_key = ""; // 键值存在标记
         for i in 0..self._args.len() {
             if i == 0 {
                 continue;
@@ -136,15 +137,21 @@ impl Cmd {
                         let v_str = &dd[1];
                         self._data_raw
                             .insert(String::from(key), String::from(v_str));
+                        last_key = "";
                     } else {
                         self._setting.push(value.to_string());
+                        last_key = self._setting[self._setting.len() - 1].as_str();
                     }
                 } else {
                     let value = &arg[1..];
                     for v in value.split("") {
                         self._setting.push(v.to_string());
                     }
+                    last_key = ""
                 }
+            } else if last_key != "" {
+                self._data_raw.insert(last_key.to_string(), arg.clone());
+                last_key = "";
             }
         }
     }
@@ -180,6 +187,13 @@ impl Cmd {
         return self;
     }
 
+    // 多函数注册
+    pub fn cmd_fn_calls(&mut self, cmds: Vec<&str>, _call: fn(app: &Cmd)) -> &mut Cmd {
+        for cmd in cmds {
+            self.cmd_fn_call(cmd, _call);
+        }
+        return self;
+    }
     // 方法路由
     pub fn router(&mut self) {
         if self.command.is_empty() {
